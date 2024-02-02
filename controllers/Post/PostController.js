@@ -147,18 +147,19 @@ export const uploadMedia = mediaStorage.array('media',10);
 export const update = async (req, res) => {
   try {
     const postId = req.params.id;
-
+    const currentData =await PostModel.findById(req.params.id);
+    if (!currentData) {
+      return res.status(404).json({ error: 'Пост не найден' });
+    }
     await PostModel.updateOne(
         {
           _id: postId,
         },
         {
-          title: req.body.title,
-          description: req.body.description,
-          media: req.body.media,
-          user: req.userId,
-          catalog: req.body.catalog,
-
+          title: req.body.title||currentData._doc.title,
+          description: req.body.description||currentData._doc.description,
+          media: req.body.media||currentData._doc.media,
+          catalog: JSON.parse(req.body.catalog)||currentData._doc.catalog
         },
     );
 

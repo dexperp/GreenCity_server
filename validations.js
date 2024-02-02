@@ -22,10 +22,9 @@ export const postCreateValidation = [
   body('title', 'Введите заголовок статьи').isLength({ min: 3 }).isString(),
   body('description', 'Введите текст статьи').isLength({ min: 3 }).isString(),
   body('catalog', 'Неверный каталог').optional().custom(value=>Array.isArray(JSON.parse(value))),
-  body('media')
-      .custom((value, { req }) => {
+  body('media').custom((value, { req }) => {
         if (!req.files || req.files.length > 10) {
-          throw new Error('Количество медиафайлов не должно превышать 4');
+          throw new Error('Количество медиафайлов не должно превышать 10');
         }
         return true;
       }),];
