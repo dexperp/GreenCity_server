@@ -12,12 +12,12 @@ const PostSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    catalog: {
+    catalog: [{
       type: mongoose.Schema.Types.ObjectId,
         ref:'Catalog',
         // required:true
       default: [],
-    },
+    }],
     likesCount: {
       type: Number,
       default: 0,

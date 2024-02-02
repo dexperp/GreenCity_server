@@ -7,7 +7,7 @@ import {loginValidation, postCreateValidation, registerValidation, updateValidat
 
 import {checkAuth, handleValidationErrors} from './utils/index.js';
 
-import { PostController, UserController} from './controllers/index.js';
+import {PostController, UserController} from './controllers/index.js';
 
 console.log("Bissmillah");
 mongoose
@@ -33,14 +33,17 @@ app.get('/user', checkAuth, UserController.getCurrentUser);
 app.get('/posts', PostController.getAll);
 app.get('/posts/:id', PostController.getOne);
 app.post('/posts/:id/like',checkAuth,PostController.likePost);
-app.post('/posts', checkAuth, postCreateValidation, handleValidationErrors, PostController.uploadMedia, PostController.create);
+
+app.post('/posts', checkAuth,PostController.uploadMedia, postCreateValidation, handleValidationErrors, PostController.create);
 app.delete('/posts/:id', checkAuth, PostController.remove);
 app.patch('/posts/:id', checkAuth, postCreateValidation, handleValidationErrors, PostController.update);
 app.patch('/user/update/:id',checkAuth,updateValidation,handleValidationErrors,UserController.update)
-app.listen(process.env.PORT || 5000, (err) => {
+
+const PORT  = process.env.PORT || 5000;
+app.listen(PORT, (err) => {
   if (err) {
     return console.log(err);
   }
 
-  console.log('Server OK');
+  console.log(`Server started by ${PORT}`);
 });

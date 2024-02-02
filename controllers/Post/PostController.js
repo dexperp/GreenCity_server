@@ -111,16 +111,20 @@ export const remove = async (req, res) => {
 export const create = async (req, res) => {
   try {
 
-    console.log(req.files.map(i=>i.path))
+
+
+    const mediaUrls = req.files.map(file => file.path);
+
     const doc = new PostModel({
       title: req.body.title,
       description: req.body.description,
-      media: req.body.media,
-      catalog: req.body.catalog,
+      media: mediaUrls,
+      catalog: JSON.parse(req.body.catalog),
       user: req.userId,
     });
 
     const post = await doc.save();
+
 
     res.json(post);
   } catch (err) {
@@ -131,22 +135,31 @@ export const create = async (req, res) => {
   }
 };
 
+
+
+
+
+const mediaStorage= multer({storage:createStorage('media')});
+export const uploadMedia = mediaStorage.array('media',10);
+
+
+
 export const update = async (req, res) => {
   try {
     const postId = req.params.id;
 
     await PostModel.updateOne(
-      {
-        _id: postId,
-      },
-      {
-        title: req.body.title,
-        description: req.body.description,
-        media: req.body.media,
-        user: req.userId,
-        catalog: req.body.catalog,
+        {
+          _id: postId,
+        },
+        {
+          title: req.body.title,
+          description: req.body.description,
+          media: req.body.media,
+          user: req.userId,
+          catalog: req.body.catalog,
 
-      },
+        },
     );
 
     res.json({
@@ -159,10 +172,4 @@ export const update = async (req, res) => {
     });
   }
 };
-
-
-
-const mediaStorage= multer({ storage: createStorage('media')});
-export const uploadMedia = mediaStorage.array('media',10);
-
 

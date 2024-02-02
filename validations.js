@@ -18,11 +18,17 @@ export const updateValidation =[
   body('avatarUrl', 'Неверная ссылка на аватарку').optional().isURL(),
 ]
 export const postCreateValidation = [
+
   body('title', 'Введите заголовок статьи').isLength({ min: 3 }).isString(),
   body('description', 'Введите текст статьи').isLength({ min: 3 }).isString(),
-  body('catalog', 'Неверный каталог').optional().isArray(),
-  body('media', 'Можно загружать не менее 4 файлов').optional().isArray({max: 4}),
-];
+  body('catalog', 'Неверный каталог').optional().custom(value=>Array.isArray(JSON.parse(value))),
+  body('media')
+      .custom((value, { req }) => {
+        if (!req.files || req.files.length > 10) {
+          throw new Error('Количество медиафайлов не должно превышать 4');
+        }
+        return true;
+      }),];
 
 export const catalogCreateValidation =[
     body('name','Введите Название каталога').isLength({min:3}).isString(),
