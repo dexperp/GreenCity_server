@@ -96,9 +96,9 @@ export const update = async (req, res) => {
       return res.status(404).json({ error: 'Пользователь не найден' });
     }
     // console.log(currentUser._doc);
-    let hash,token;
+    let hash;
     if(req.body.email){
-      token = createToken({_id:userId},'30d');
+      createToken({_id:userId},'30d');
     }
     if(req.body.password){
       hash=createHash(req.body.password);
@@ -137,15 +137,20 @@ export const uploadAvatar = (req, res, next) => {
   });
 };
 
-export const updateAvatar = (req, res) => {
-  try{
+export const updateAvatar = async (req, res) => {
+  try {
+    const id = req.body.id;
+    if(!req.body.id){return res.status(404).json("Не удалось обновить аватар") }
+      await UserModel.findOneAndUpdate({_id:id},{
+        avatarUrl:req.file.path
+      })
+
     console.log(req.file)
     res.json({
-      files: req.file,
+      files: req.file.path,
     });
-  }
-  catch (err){
-    if(err){
+  } catch (err) {
+    if (err) {
       console.log(err)
       res.status(500).json(err.message("Не удалось отправить файл"))
     }

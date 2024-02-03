@@ -31,6 +31,37 @@ export const likePost = async (req,res)=>{
     });
   }
 }
+
+export const disLikePost = async (req,res)=>{
+  try{
+    const postId = req.params.id;
+    PostModel.updateOne(
+        {_id:postId},
+        {$inc:{likesCount:-1}},
+        (err, doc) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({
+              message: 'Не удалось вернуть пост',
+            });
+          }
+          if (!doc) {
+            return res.status(404).json({
+              message: 'Пост не найден',
+            });
+          }
+
+          res.json(doc);
+        }
+    )
+  }
+  catch (e){
+    res.status(500).json({
+      message: 'Не удалось поставить лайк',
+    });
+  }
+}
+
 export const getAll = async (req, res) => {
   try {
     const posts = await PostModel.find().populate('user').exec();
@@ -110,9 +141,6 @@ export const remove = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
-
-
-
     const mediaUrls = req.files.map(file => file.path);
 
     const doc = new PostModel({
@@ -145,7 +173,14 @@ export const uploadMedia = mediaStorage.array('media',10);
 
 
 export const update = async (req, res) => {
+
   try {
+    const mediaUrls = [];
+    if(req.files){
+      const files =req.files.map(file => file.path);
+      mediaUrls.push(...files)
+    }
+
     const postId = req.params.id;
     const currentData =await PostModel.findById(req.params.id);
     if (!currentData) {
@@ -158,7 +193,7 @@ export const update = async (req, res) => {
         {
           title: req.body.title||currentData._doc.title,
           description: req.body.description||currentData._doc.description,
-          media: req.body.media||currentData._doc.media,
+          media: JSON.parse(req.body.media)?[...mediaUrls,...JSON.parse(req.body.media)]:currentData._doc.media,
           catalog: JSON.parse(req.body.catalog)||currentData._doc.catalog
         },
     );
