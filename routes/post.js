@@ -14,6 +14,10 @@ PostRouter.post('/', checkAuth, PostController.uploadMedia, postCreateValidation
 PostRouter.delete('/:id', checkAuth, PostController.remove);
 PostRouter.patch('/:id', checkAuth, PostController.uploadMedia, postCreateValidation, handleValidationErrors, PostController.update);
 
+PostRouter.get('/news',PostController.readAllNews)
+PostRouter.delete('/news',PostController.removeNews)
+PostRouter.post('/news',PostController.createNews)
+
 export const CatalogRouter = new Router();
 CatalogRouter.post('/',checkAuth,CatalogController.createCatalog)
 CatalogRouter.get('/',CatalogController.getAllCatalog)
