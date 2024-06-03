@@ -14,7 +14,7 @@ PostRouter.post('/', checkAuth, PostController.uploadMedia, postCreateValidation
 PostRouter.delete('/:id', checkAuth, PostController.remove);
 PostRouter.patch('/:id', checkAuth, PostController.uploadMedia, postCreateValidation, handleValidationErrors, PostController.update);
 
-PostRouter.get('/news',PostController.readAllNews)
+PostRouter.get('/news/all',PostController.readAllNews)
 PostRouter.delete('/news',PostController.removeNews)
 PostRouter.post('/news',PostController.createNews)
 
