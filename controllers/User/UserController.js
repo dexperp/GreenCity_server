@@ -6,11 +6,15 @@ import {createHash} from "../../utils/Hash.js";
 
 export const register = async (req, res) => {
   try {
+    const existingUser = await UserModel.findOne({ email: req.body.email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Пользователь с таким email уже существует' });
+    }
     const password = req.body.password;
     const hash = await Hash.createHash(password);
     const doc = new UserModel({
       email: req.body.email,
-      fullName: req.body.fullName,
+      username: req.body.username,
       avatarUrl: req.body.avatarUrl,
       passwordHash: hash,
     });
@@ -21,15 +25,13 @@ export const register = async (req, res) => {
 
     const { passwordHash, ...userData } = user._doc;
 
-    res.json({
+    res.status(201).json({
       ...userData,
       token,
     });
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      message: 'Не удалось зарегистрироваться',
-    });
+
   }
 };
 
@@ -51,7 +53,10 @@ export const login = async (req, res) => {
       });
     }
 
-    const token = createToken({_id: user._id},'30d')
+    const token = createToken({
+      _id: user._id,
+      fullName: user.fullName,
+      isModerator:user.isModerator},'30d')
 
     const { passwordHash, ...userData } = user._doc;
 
@@ -153,6 +158,26 @@ export const updateAvatar = async (req, res) => {
     if (err) {
       console.log(err)
       res.status(500).json(err.message("Не удалось отправить файл"))
+    }
+  }
+}
+export const getUserByID = async (req,res)=>{
+  try{
+    const userId = req.params.id;
+    const currentUser = await UserModel.findById(userId);
+    if (!currentUser) {
+      return res.status(404).json({ error: 'Пользователь не найден' });
+    }
+    else{
+      return res.json(currentUser);
+    }
+  }
+  catch (err) {
+    if (err) {
+      console.log(err);
+      res.status(500).json({
+        message: 'Нет доступа',
+      });
     }
   }
 }

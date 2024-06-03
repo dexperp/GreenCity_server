@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema(
     {
-        fullName: {
+        username: {
             type: String,
             required: true,
         },
@@ -24,11 +24,11 @@ const UserSchema = new mongoose.Schema(
             type: Boolean,
             default: false
         },
-        watchingRegions: {
+        subscribes: {
             type: Array,
             default: []
         },
-        postsHistory: {
+        posts: {
             type: Array,
             default: []
         }

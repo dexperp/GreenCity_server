@@ -1,6 +1,7 @@
 import PostModel from '../../models/Post.js';
 import multer from "multer";
 import {createStorage} from "../../utils/index.js";
+import Catalog from "../../models/Catalog.js";
 
 export const likePost = async (req,res)=>{
   try{
@@ -64,7 +65,13 @@ export const disLikePost = async (req,res)=>{
 
 export const getAll = async (req, res) => {
   try {
-    const posts = await PostModel.find().populate('user').exec();
+    const posts = await PostModel.find().populate({
+      path: 'user',
+      select: 'fullName email avatarUrl _id isModerator'
+    }).populate({
+      path: 'catalog',
+      select: 'name'
+    }).exec();
     res.json(posts);
   } catch (err) {
     console.log(err);
@@ -142,7 +149,7 @@ export const remove = async (req, res) => {
 export const create = async (req, res) => {
   try {
     const mediaUrls = req.files.map(file => file.path);
-
+console.log(JSON.parse(req.body.catalog))
     const doc = new PostModel({
       title: req.body.title,
       description: req.body.description,
@@ -191,6 +198,7 @@ export const update = async (req, res) => {
           _id: postId,
         },
         {
+          closed:req.body.closed||currentData._doc.closed,
           title: req.body.title||currentData._doc.title,
           description: req.body.description||currentData._doc.description,
           media: JSON.parse(req.body.media)?[...mediaUrls,...JSON.parse(req.body.media)]:currentData._doc.media,
