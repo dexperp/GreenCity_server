@@ -220,6 +220,7 @@ export const update = async (req, res) => {
 
 export const readAllNews = async (req,res) => {
   try {
+    console.log("HERE: ");
     const news = await News.find();
     res.status(201).json(news);
   } catch (e) {
