@@ -1,8 +1,7 @@
 import {checkAuth, handleValidationErrors} from "../utils/index.js";
 import {postCreateValidation} from "../validations.js";
-import {PostController, CommentsController} from "../controllers/index.js";
+import {PostController, CommentsController,NewsController,CatalogController} from "../controllers/index.js";
 import {Router} from "express";
-import * as CatalogController from "../controllers/Post/CatalogController.js";
 
 
 export const PostRouter = new Router();
@@ -15,9 +14,9 @@ PostRouter.delete('/:id', checkAuth, PostController.remove);
 PostRouter.patch('/:id', checkAuth, PostController.uploadMedia, postCreateValidation, handleValidationErrors, PostController.update);
 
 export const NewsRouter = new Router();
-NewsRouter.get('/all',PostController.readAllNews)
-NewsRouter.delete('/',PostController.removeNews)
-NewsRouter.post('/',PostController.createNews)
+NewsRouter.get('/all',NewsController.readAllNews)
+NewsRouter.delete('/',NewsController.removeNews)
+NewsRouter.post('/',NewsController.createNews)
 
 export const CatalogRouter = new Router();
 CatalogRouter.post('/',checkAuth,CatalogController.createCatalog)
