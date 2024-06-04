@@ -19,4 +19,5 @@ jobs:
       with:
         node-version: 20.x
     - run: npm install
+    - run: git pull
     - run: pm2 restart greencity_server
