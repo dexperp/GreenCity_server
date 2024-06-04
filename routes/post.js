@@ -15,7 +15,7 @@ PostRouter.patch('/:id', checkAuth, PostController.uploadMedia, postCreateValida
 
 export const NewsRouter = new Router();
 NewsRouter.get('/all',NewsController.readAllNews)
-NewsRouter.delete('/',NewsController.removeNews)
+NewsRouter.delete('/:id',NewsController.removeNews)
 NewsRouter.post('/',NewsController.createNews)
 
 export const CatalogRouter = new Router();
