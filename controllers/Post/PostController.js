@@ -156,7 +156,8 @@ export const create = async (req, res) => {
       media: mediaUrls,
       catalog: req.body.catalog,
       user: req.userId,
-      address:req.body.address
+      address:[Number(req.body.lat),Number(req.body.long),]
+
     });
 
     const post = await doc.save();
