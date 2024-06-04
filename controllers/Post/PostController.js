@@ -116,28 +116,27 @@ export const remove = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    PostModel.findOneAndDelete(
+    await PostModel.findOneAndDelete(
       {
         _id: postId,
-      },
-      (err, doc) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            message: 'Не удалось удалить пост',
-          });
-        }
+      }).then((err, doc) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({
+              message: 'Не удалось удалить пост',
+            });
+          }
 
-        if (!doc) {
-          return res.status(404).json({
-            message: 'Пост не найден',
-          });
-        }
+          if (!doc) {
+            return res.status(404).json({
+              message: 'Пост не найден',
+            });
+          }
 
-        res.json({
-          success: true,
-        });
-      },
+          res.json({
+            success: true,
+          });
+        },
     );
   } catch (err) {
     console.log(err);

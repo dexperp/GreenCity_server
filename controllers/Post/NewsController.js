@@ -28,29 +28,28 @@ export const createNews = async (req, res) => {
 export const removeNews = async (req, res) => {
     try {
         const id = req.params.id;
-        News.findOneAndDelete(
+       await News.findOneAndDelete(
             {
                 _id: id,
             },
-            (err, doc) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json({
-                        message: 'Не удалось удалить новость',
-                    });
-                }
+        ).then((err, doc) => {
+           if (err) {
+               console.log(err);
+               return res.status(500).json({
+                   message: 'Не удалось удалить новость',
+               });
+           }
 
-                if (!doc) {
-                    return res.status(404).json({
-                        message: 'Новость не найдена',
-                    });
-                }
+           if (!doc) {
+               return res.status(404).json({
+                   message: 'Новость не найдена',
+               });
+           }
 
-                res.json({
-                    success: true,
-                });
-            },
-        );
+           res.json({
+               success: true,
+           });
+       });
     } catch (err) {
         console.log(err);
         res.status(500).json({
