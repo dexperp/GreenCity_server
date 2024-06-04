@@ -149,12 +149,12 @@ export const remove = async (req, res) => {
 export const create = async (req, res) => {
   try {
     const mediaUrls = req.files.map(file => file.path);
-console.log(JSON.parse(req.body.catalog))
+
     const doc = new PostModel({
       title: req.body.title,
       description: req.body.description,
       media: mediaUrls,
-      catalog: JSON.parse(req.body.catalog),
+      catalog: req.body.catalog,
       user: req.userId,
     });
 
