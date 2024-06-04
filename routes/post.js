@@ -24,7 +24,7 @@ CatalogRouter.get('/',CatalogController.getAllCatalog)
 
 export const CommentRouter = new Router();
 CommentRouter.get('/:id', CommentsController.getPostComments);
-CommentRouter.put('/', checkAuth, CommentsController.create);
+CommentRouter.post('/', checkAuth, CommentsController.create);
 CommentRouter.delete('/:id', checkAuth, CommentsController.remove);
 CommentRouter.get('/:id/like', checkAuth, CommentsController.likeComment);
 CommentRouter.get('/:id/dislike', checkAuth, CommentsController.disLikeComment);
