@@ -14,9 +14,10 @@ PostRouter.post('/', checkAuth, PostController.uploadMedia, postCreateValidation
 PostRouter.delete('/:id', checkAuth, PostController.remove);
 PostRouter.patch('/:id', checkAuth, PostController.uploadMedia, postCreateValidation, handleValidationErrors, PostController.update);
 
-PostRouter.get('/news/all',PostController.readAllNews)
-PostRouter.delete('/news',PostController.removeNews)
-PostRouter.post('/news',PostController.createNews)
+export const NewsRouter = new Router();
+NewsRouter.get('/all',PostController.readAllNews)
+NewsRouter.delete('/',PostController.removeNews)
+NewsRouter.post('/',PostController.createNews)
 
 export const CatalogRouter = new Router();
 CatalogRouter.post('/',checkAuth,CatalogController.createCatalog)

@@ -4,7 +4,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import {AuthRouter} from "./routes/auth.js";
 import {UserRouter} from "./routes/user.js";
-import {CatalogRouter, PostRouter} from "./routes/post.js";
+import {CatalogRouter, NewsRouter, PostRouter} from "./routes/post.js";
 import {CommentRouter} from "./routes/post.js";
 
 
@@ -21,6 +21,7 @@ app.use('/files', express.static('files'));
 app.use('/auth', AuthRouter);
 app.use('/user', UserRouter);
 app.use('/posts', PostRouter);
+app.use('/news', NewsRouter);
 app.use('/comments', CommentRouter)
 app.use('/catalog', CatalogRouter)
 
