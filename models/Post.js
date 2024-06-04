@@ -37,6 +37,11 @@ const PostSchema = new mongoose.Schema(
         closed:{
             type:mongoose.Schema.Types.Boolean,
             default:false
+        },
+        address:{
+            type:mongoose.Schema.Types.Array,
+            default:[],
+            required: true,
         }
 
     },
